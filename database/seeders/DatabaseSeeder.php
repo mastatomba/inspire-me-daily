@@ -14,10 +14,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         User::factory()->create([
-            'name' => 'Mahatma Gandhi',
-            'email' => 'mahatma@gandhi.com',
+            'name' => "Mahatma Gandhi",
+            'email' => "mahatma@gandhi.com",
         ]);
 
         User::factory(10)->create();
+
+        $this->call([
+            QuoteSeeder::class,
+        ]);
     }
 }

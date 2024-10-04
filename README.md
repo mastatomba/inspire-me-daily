@@ -53,7 +53,7 @@ Run artisan server:
 php artisan serve
 ```
 
-Visit InspireMeDaily in your browser, and login with:
+Visit InspireMeDaily in your browser (http://127.0.0.1:8000), and login with:
 - Username: `mahatma@gandhi.com`
 - Password: `secret-pw`
 
