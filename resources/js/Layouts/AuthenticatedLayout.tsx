@@ -31,7 +31,13 @@ export default function Authenticated({
                                     href={route('dashboard')}
                                     active={route().current('dashboard')}
                                 >
-                                    Dashboard
+                                    Home
+                                </NavLink>
+                                <NavLink
+                                    href={route('top25')}
+                                    active={route().current('top25')}
+                                >
+                                    Top 25 quotes
                                 </NavLink>
                             </div>
                         </div>

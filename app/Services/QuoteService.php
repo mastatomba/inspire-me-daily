@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Quote;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use App\Models\Quote;
 
 class QuoteService
 {
@@ -13,6 +13,22 @@ class QuoteService
     public function getRandomQuote(): Quote
     {
         return Quote::inRandomOrder()->first();
+    }
+
+    /**
+     * @return Quote[]
+     */
+    public function getTopRatedQuotes(int $count)
+    {
+        // use with() to eager load the ratings
+        $quotes = Quote::with('ratings')->get();
+        // sort descendingly on ratings and if ratings are equal, take number of votes into account
+        $sorted_quotes = $quotes->sortBy([
+            fn (Quote $a, Quote $b) => $b->calculateRating() <=> $a->calculateRating(),
+            fn (Quote $a, Quote $b) => $b->getNumberOfVotes() <=> $a->getNumberOfVotes(),
+        ]);
+        // use values() to reindex the sorted array and slice() to limit the results
+        return $sorted_quotes->values()->slice(0, $count);
     }
 
     /**

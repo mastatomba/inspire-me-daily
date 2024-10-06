@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -16,6 +17,8 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'show'])->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/top25', [QuoteController::class, 'listTop25'])->middleware(['auth', 'verified'])->name('top25');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

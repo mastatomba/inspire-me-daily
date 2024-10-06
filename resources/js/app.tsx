@@ -1,5 +1,6 @@
 import '../css/app.css';
 import '../css/blockquote.css';
+import '../css/stars.css';
 import './bootstrap';
 
 import { createInertiaApp } from '@inertiajs/react';

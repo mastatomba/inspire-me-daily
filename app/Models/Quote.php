@@ -27,6 +27,11 @@ class Quote extends Model
         return $this->hasMany(QuoteRating::class);
     }
 
+    public function getNumberOfVotes(): int
+    {
+        return $this->ratings->count();
+    }
+
     public function calculateRating(): float
     {
         $ratings = $this->ratings;
