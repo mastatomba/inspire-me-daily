@@ -18,10 +18,11 @@ class DatabaseSeeder extends Seeder
             'email' => "mahatma@gandhi.com",
         ]);
 
-        User::factory(10)->create();
+        User::factory(20)->create();
 
         $this->call([
             QuoteSeeder::class,
+            QuoteRatingSeeder::class,
         ]);
     }
 }
