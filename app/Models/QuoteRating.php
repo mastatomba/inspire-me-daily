@@ -30,7 +30,7 @@ class QuoteRating extends Model
     /**
      * Get the quote
      */
-    public function quote(): BelongsToc
+    public function quote(): BelongsTo
     {
         return $this->belongsTo(Quote::class);
     }

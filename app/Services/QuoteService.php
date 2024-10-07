@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Quote;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -15,10 +16,7 @@ class QuoteService
         return Quote::inRandomOrder()->first();
     }
 
-    /**
-     * @return Quote[]
-     */
-    public function getTopRatedQuotes(int $count)
+    public function getTopRatedQuotes(int $count): Collection
     {
         // use with() to eager load the ratings
         $quotes = Quote::with('ratings')->get();
@@ -96,7 +94,7 @@ class QuoteService
                 $response->throw();
             }
         }
-        catch (Exception $e)
+        catch (\Exception $e)
         {
             Log::error("Error occured during fetching of new quotes: " . $e->getMessage());
         }
