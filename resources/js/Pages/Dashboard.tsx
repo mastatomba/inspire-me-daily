@@ -1,20 +1,26 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import React, { useState } from "react";
+import { useState } from 'react';
+import Modal from '@/Components/Modal';
+import SecondaryButton from '@/Components/SecondaryButton';
 
-export default function Dashboard({quote} : {quote:any}) {
-    const [rating, setRating] = useState(null);
-    const [hover, setHover] = useState(null);
-    const [totalStars, setTotalStars] = useState(5);
-  
-    const handleChange = (e) => {
-      setTotalStars(parseInt(Boolean(e.target.value, 10) ? e.target.value : 5));
+const randomNumberInRange = (min:number, max:number) => {
+    return Math.floor(Math.random()
+        * (max - min + 1)) + min;
+};
+
+let cardColor = randomNumberInRange(1,3);
+let totalStars = 5;
+
+export default function Dashboard({quote, rating} : {quote:any, rating:number}) {
+    const [showRatingModal, setShowRatingModal] = useState(false);
+
+    const closeModal = () => {
+        setShowRatingModal(false);
     };
 
-    const randomNumberInRange = (min:number, max:number) => {
-        return Math.floor(Math.random()
-            * (max - min + 1)) + min;
-    };
+    const [currentRating, setCurrentRating] = useState(rating);
+    const [hover, setHover] = useState<number | null>(null);
 
     return (
         <AuthenticatedLayout
@@ -27,54 +33,43 @@ export default function Dashboard({quote} : {quote:any}) {
             <Head title="Home" />
 
             <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            <blockquote className={`q-card q-card-color-${randomNumberInRange(1,3)}`}>
-                                <div className="content">{quote.quote}</div>
-                                <div className='author'>{quote.author}</div>
-                            </blockquote>
-                        </div>
+                <div className="blockquote-container">
+                    <blockquote className={`q-card q-card-color-${cardColor}`}>
+                        <div className="content">{quote.quote}</div>
+                        <div className='author'>{quote.author}</div>
+                    </blockquote>
+                    <div className="text-right">
+                        <p>Your rating is: <span className={`star ${currentRating>0 ? 'blue':''}`}>&#9733;</span>{currentRating}</p>
+                        <p>
+                        <SecondaryButton onClick={() => setShowRatingModal(true)}>
+                            Rate
+                        </SecondaryButton>
+                        </p>
                     </div>
                 </div>
             </div>
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900">
-                            {[...Array(totalStars)].map((star, index) => {
-                                const currentRating = index + 1;
-
-                                return (
-                                <label key={index}>
-                                    <input
-                                    key={star}
-                                    type="radio"
-                                    name="rating"
-                                    value={currentRating}
-                                    onChange={() => setRating(currentRating)}
-                                    />
-                                    <span
-                                    className="star"
-                                    style={{
-                                        color:
-                                        currentRating <= (hover || rating) ? "#ffc107" : "#e4e5e9",
-                                    }}
-                                    onMouseEnter={() => setHover(currentRating)}
-                                    onMouseLeave={() => setHover(null)}
-                                    >
-                                    &#9733;
-                                    </span>
-                                </label>
-                                );
-                            })}
-                            <br />
-                            <br />
-                            <p>Your rating is: {rating}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <Modal show={showRatingModal} onClose={closeModal}>
+                {[...Array(totalStars)].map((star, index) => {
+                    return (
+                    <label key={index}>
+                        <input
+                        key={star}
+                        type="radio"
+                        name="rating"
+                        value={(index + 1)}
+                        onChange={() => setCurrentRating((index + 1))}
+                        />
+                        <span
+                        className={`star ${((index + 1) <= (hover || currentRating)) ? 'blue':''}`}
+                        onMouseEnter={() => setHover(index + 1)}
+                        onMouseLeave={() => setHover(null)}
+                        >
+                        &#9733;
+                        </span>
+                    </label>
+                    );
+                })}
+            </Modal>
         </AuthenticatedLayout>
     );
 }

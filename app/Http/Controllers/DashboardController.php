@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\QuoteService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -24,9 +25,15 @@ class DashboardController extends Controller
             Cache::put(self::FETCH_QUOTES_LOCK, true, 30);
         }
 
+        $quote = $quoteService->getRandomQuote();
+
         return Inertia::render('Dashboard', [
-            'quote' => $quoteService->getRandomQuote(),
-            'card_color' => random_int(1, 3)
+            'quote' => $quote->only([
+                'id',
+                'author',
+                'quote'
+            ]),
+            'rating' => $quote->getUserRating(Auth::user()->id)
         ]);
     }
 }

@@ -5,4 +5,11 @@ input[type="radio"] {
     cursor: pointer;
     font-size: 2rem;
     margin: 5px;
+    color: #e4e5e9;
+}
+.star.yellow {
+    color: #f5c518;
+}
+.star.blue {
+    color: #0e63be;
 }

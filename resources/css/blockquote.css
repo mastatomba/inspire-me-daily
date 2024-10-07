@@ -1,4 +1,4 @@
-blockquote { max-width: 25rem; margin-inline: auto }
+.blockquote-container { max-width: 25rem; margin-inline: auto }
 
 /* blockquote card colors */
 blockquote.q-card-color-1{

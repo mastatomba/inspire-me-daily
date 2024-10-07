@@ -48,6 +48,16 @@ class Quote extends Model
         return $total_rating / $ratings->count();
     }
 
+    public function getUserRating(int $user_id): int
+    {
+        $rating = QuoteRating::query()
+            ->where('quote_id', '=', $this->id)
+            ->where('user_id', '=', $user_id)
+            ->first()
+        ;
+        return $rating->rating ?? 0;
+    }
+
     public static function createIdentifier(string $author, string $quote): string
     {
         return md5(str_replace(' ', '', ($author . '_' . $quote)));

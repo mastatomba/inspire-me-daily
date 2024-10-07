@@ -22,6 +22,23 @@ class QuoteTest extends TestCase
         $this->insertAndTestQuoteRatings([5, 5, 4, 4, 3, 3], 4.0);
     }
 
+    public function test_get_user_rating(): void
+    {
+        $quote = Quote::factory()->create();
+        $user = User::factory()->create();
+
+        $this->assertEquals(0, $quote->getUserRating($user->id));
+
+        $this->insertQuoteRating($user->id, $quote->id, 3);
+
+        $this->assertEquals(3, $quote->getUserRating($user->id));
+
+        $user = User::factory()->create();
+        $this->insertQuoteRating($user->id, $quote->id, 4);
+
+        $this->assertEquals(4, $quote->getUserRating($user->id));
+    }
+
     private function insertAndTestQuoteRatings(array $userRatings, float $expectedRating)
     {
         $quote = Quote::factory()->create();
