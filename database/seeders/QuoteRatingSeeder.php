@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Quote;
 use App\Models\QuoteRating;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class QuoteRatingSeeder extends Seeder
@@ -27,7 +26,9 @@ class QuoteRatingSeeder extends Seeder
                 $data[] = [
                     'user_id' => $user_ids[$i],
                     'quote_id' => $quote_id,
-                    'rating' => random_int(2, 5)
+                    'rating' => random_int(2, 5),
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ];
             }
         }
