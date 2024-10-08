@@ -1,8 +1,36 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
+import { useState } from 'react';
+import axios from 'axios';
+import Modal from '@/Components/Modal';
+import RatingBreakdown from '@/Components/RatingBreakdown';
+import SecondaryButton from '@/Components/SecondaryButton';
 
 export default function Top25({quotes} : {quotes:Array<any>}) {
     var quoteNumber = 0;
+
+    const [showRatingBreakdownModal, setShowRatingBreakdownModal] = useState(false);
+
+    const closeRatingBreakdownModal = () => {
+        setShowRatingBreakdownModal(false);
+    };
+
+    const [ratings, setRatings] = useState<object | null>(null);
+
+    const loadRatingsAndShowRatingBreakdownModal = (quote_id:number) => {
+        axios.get('/get_rating_breakdown', {
+            params: {
+              id: quote_id
+            }
+          })
+          .then(function (response) {
+            setRatings(response.data);
+            setShowRatingBreakdownModal(true);
+          })
+          .catch(function (error) {
+            console.error(error);
+          });
+    }
 
     return (
         <AuthenticatedLayout
@@ -34,7 +62,10 @@ export default function Top25({quotes} : {quotes:Array<any>}) {
                                         <td className="whitespace-nowrap px-6 py-4">{quote.author}</td>
                                         <td className="px-6 py-4">{quote.quote}</td>
                                         <td className="whitespace-nowrap px-6 py-4">
-                                            <span className="star yellow">&#9733;</span>{quote.rating} ({quote.votes})
+                                            <span 
+                                            className="star yellow"
+                                            onClick={() => loadRatingsAndShowRatingBreakdownModal(quote.id)}
+                                            >&#9733;</span>{quote.rating} ({quote.votes})
                                         </td>
                                     </tr>
                                 ))}
@@ -44,6 +75,16 @@ export default function Top25({quotes} : {quotes:Array<any>}) {
                     </div>
                 </div>
             </div>
+            <Modal show={showRatingBreakdownModal} onClose={closeRatingBreakdownModal}>
+                <div className="p-6">
+                    <RatingBreakdown ratings={ratings}/>
+                    <div className="mt-6 flex justify-end">
+                        <SecondaryButton onClick={closeRatingBreakdownModal}>
+                            Close
+                        </SecondaryButton>
+                    </div>
+                </div>
+            </Modal>
         </AuthenticatedLayout>
     );
 }

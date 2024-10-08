@@ -6,6 +6,7 @@ InspireMeDaily is a web application where users get an inspirational quote each 
 * Give rating to quotes
 * Show a listing of quotes rated by the current user
 * Show a top 25 listing of quotes rated by all users
+* Show a breakdown of votes per rating
 * Fetch quotes through [ZenQuotes API](https://zenquotes.io/)
 
 ## Installation
@@ -93,3 +94,6 @@ I choose this because it has a lot of quotes and it was free to use.
 I looked for some fun designs to show the random quote to the user and I choose "Quote cards".
 
 See pen created on CodePen.io. Original URL: [https://codepen.io/MarkBoots/pen/gOvObMp](https://codepen.io/MarkBoots/pen/gOvObMp).
+
+### React progress bar
+I used a progress bar React component. Which is found [here](https://github.com/KaterinaLupacheva/react-progress-bar).

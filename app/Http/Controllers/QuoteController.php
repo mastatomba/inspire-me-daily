@@ -29,6 +29,28 @@ class QuoteController extends Controller
         ]);
     }
 
+    public function getRatingBreakdown(Request $request): array
+    {
+        $quote = Quote::find($request->id);
+        $ratings = $quote->ratings;
+
+        $votesPerRatings = [
+            'rating_1' => 0,
+            'rating_2' => 0,
+            'rating_3' => 0,
+            'rating_4' => 0,
+            'rating_5' => 0
+        ];
+        foreach ($ratings as $rating)
+        {
+            $votesPerRatings['rating_' . $rating->rating] += 1;
+        }
+
+        return $votesPerRatings + [
+            'total' => $ratings->count()
+        ];
+    }
+
     /**
      * Show the top 25 quotes page
      */

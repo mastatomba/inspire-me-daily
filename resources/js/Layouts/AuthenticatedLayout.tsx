@@ -34,8 +34,8 @@ export default function Authenticated({
                                     Home
                                 </NavLink>
                                 <NavLink
-                                    href={route('top25')}
-                                    active={route().current('top25')}
+                                    href={route('quote.top25_ratings')}
+                                    active={route().current('quote.top25_ratings')}
                                 >
                                     Top 25 quotes
                                 </NavLink>
@@ -76,7 +76,7 @@ export default function Authenticated({
                                             Profile
                                         </Dropdown.Link>
                                         <Dropdown.Link
-                                            href={route('my_ratings')}
+                                            href={route('quote.user_ratings')}
                                         >
                                             My ratings
                                         </Dropdown.Link>
