@@ -16,7 +16,7 @@ class DashboardController extends Controller
     /**
      * Show the dashboard page
      */
-    public function show(Request $request): Response
+    public function randomQuote(Request $request): Response
     {
         $quoteService = new QuoteService();
 

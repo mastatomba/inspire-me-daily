@@ -1,8 +1,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
 import Modal from '@/Components/Modal';
 import SecondaryButton from '@/Components/SecondaryButton';
+import PrimaryButton from '@/Components/PrimaryButton';
 
 const randomNumberInRange = (min:number, max:number) => {
     return Math.floor(Math.random()
@@ -17,10 +18,20 @@ export default function Dashboard({quote, rating} : {quote:any, rating:number}) 
 
     const closeModal = () => {
         setShowRatingModal(false);
+        setSaveRatingMessage(null);
+    };
+
+    const saveRating = () => {
+        router.post(`/save_rating`, {
+            quote_id: quote.id,
+            rating: currentRating
+        })
+        setSaveRatingMessage('The rating is successfully saved.');
     };
 
     const [currentRating, setCurrentRating] = useState(rating);
     const [hover, setHover] = useState<number | null>(null);
+    const [saveRatingMessage, setSaveRatingMessage] = useState<string | null>(null);
 
     return (
         <AuthenticatedLayout
@@ -49,26 +60,45 @@ export default function Dashboard({quote, rating} : {quote:any, rating:number}) 
                 </div>
             </div>
             <Modal show={showRatingModal} onClose={closeModal}>
-                {[...Array(totalStars)].map((star, index) => {
-                    return (
-                    <label key={index}>
-                        <input
-                        key={star}
-                        type="radio"
-                        name="rating"
-                        value={(index + 1)}
-                        onChange={() => setCurrentRating((index + 1))}
-                        />
-                        <span
-                        className={`star ${((index + 1) <= (hover || currentRating)) ? 'blue':''}`}
-                        onMouseEnter={() => setHover(index + 1)}
-                        onMouseLeave={() => setHover(null)}
-                        >
-                        &#9733;
-                        </span>
-                    </label>
-                    );
-                })}
+                <div className="p-6">
+                    <h2 className="text-lg font-medium text-gray-900">
+                        Give your rating
+                    </h2>
+                    <div className="mt-6">
+                    {[...Array(totalStars)].map((star, index) => {
+                        return (
+                        <label key={index}>
+                            <input
+                            key={star}
+                            type="radio"
+                            name="rating"
+                            value={(index + 1)}
+                            onChange={() => setCurrentRating((index + 1))}
+                            />
+                            <span
+                            className={`star ${((index + 1) <= (hover || currentRating)) ? 'blue':''}`}
+                            onMouseEnter={() => setHover(index + 1)}
+                            onMouseLeave={() => setHover(null)}
+                            >
+                            &#9733;
+                            </span>
+                        </label>
+                        );
+                    })}
+                    </div>
+                    <p className="mt-1 text-sm text-gray-600">
+                        {saveRatingMessage}
+                    </p>
+                    <div className="mt-6 flex justify-end">
+                        <SecondaryButton onClick={closeModal}>
+                            Close
+                        </SecondaryButton>
+
+                        <PrimaryButton className="ms-3" onClick={saveRating} disabled={currentRating==0}>
+                            Save
+                        </PrimaryButton>
+                    </div>
+                </div>
             </Modal>
         </AuthenticatedLayout>
     );

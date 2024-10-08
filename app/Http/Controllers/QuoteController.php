@@ -13,6 +13,23 @@ use Inertia\Response;
 class QuoteController extends Controller
 {
     /**
+     * Show the quote
+     */
+    public function show(Request $request): Response
+    {
+        $quote = Quote::find($request->id);
+
+        return Inertia::render('Dashboard', [
+            'quote' => $quote->only([
+                'id',
+                'author',
+                'quote'
+            ]),
+            'rating' => $quote->getUserRating(Auth::user()->id)
+        ]);
+    }
+
+    /**
      * Show the top 25 quotes page
      */
     public function listTop25(Request $request): Response

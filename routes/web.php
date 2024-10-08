@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\QuoteController;
+use App\Http\Controllers\QuoteRatingController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,11 +17,13 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', [DashboardController::class, 'show'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'randomQuote'])->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/show_quote', [QuoteController::class, 'show'])->middleware(['auth', 'verified'])->name('quote.show');
 Route::get('/top25', [QuoteController::class, 'listTop25'])->middleware(['auth', 'verified'])->name('top25');
-
 Route::get('/my_ratings', [QuoteController::class, 'listCurrentUserRatings'])->middleware(['auth', 'verified'])->name('my_ratings');
+
+Route::post('/save_rating', [QuoteRatingController::class, 'updateOrCreate'])->middleware(['auth', 'verified'])->name('rating.save');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
