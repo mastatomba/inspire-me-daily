@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Quote;
+use App\Models\QuoteRating;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -27,6 +28,16 @@ class QuoteService
         ]);
         // use values() to reindex the sorted array and slice() to limit the results
         return $sorted_quotes->values()->slice(0, $count);
+    }
+
+    public function getQuotesRatedByUser(int $user_id): Collection
+    {
+        // use with() to eager load the ratings
+        $quotes = QuoteRating::with('quote')->where('user_id', '=', $user_id)->get();
+        // sort descendingly on rating
+        $sorted_quotes = $quotes->sortByDesc('rating');
+        // use values() to reindex the sorted array and slice() to limit the results
+        return $sorted_quotes->values();
     }
 
     /**

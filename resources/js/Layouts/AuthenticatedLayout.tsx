@@ -76,6 +76,11 @@ export default function Authenticated({
                                             Profile
                                         </Dropdown.Link>
                                         <Dropdown.Link
+                                            href={route('my_ratings')}
+                                        >
+                                            My ratings
+                                        </Dropdown.Link>
+                                        <Dropdown.Link
                                             href={route('logout')}
                                             method="post"
                                             as="button"

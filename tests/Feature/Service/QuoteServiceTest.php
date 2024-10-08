@@ -61,6 +61,56 @@ class QuoteServiceTest extends TestCase
         $this->assertEquals($quote1->id, $top_quotes[4]->id); // 3.0
     }
 
+    public function test_get_quotes_rated_by_user(): void
+    {
+        //getQuotesRatedByUser
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        $user3 = User::factory()->create();
+
+        $quote1 = Quote::factory()->create();
+        $quote2 = Quote::factory()->create();
+        $quote3 = Quote::factory()->create();
+        $quote4 = Quote::factory()->create();
+        $quote5 = Quote::factory()->create();
+        $quote6 = Quote::factory()->create();
+        $quote7 = Quote::factory()->create();
+        $quote8 = Quote::factory()->create();
+        $quote9 = Quote::factory()->create();
+
+        $this->insertQuoteRating($user1->id, $quote1->id, 3);
+        $this->insertQuoteRating($user1->id, $quote3->id, 4);
+        $this->insertQuoteRating($user1->id, $quote5->id, 5);
+        $this->insertQuoteRating($user1->id, $quote7->id, 2);
+        $this->insertQuoteRating($user1->id, $quote8->id, 5);
+        $this->insertQuoteRating($user1->id, $quote9->id, 4);
+
+        $this->insertQuoteRating($user2->id, $quote2->id, 3);
+        $this->insertQuoteRating($user2->id, $quote4->id, 2);
+        $this->insertQuoteRating($user2->id, $quote6->id, 4);
+
+        $quotes = $this->quoteService->getQuotesRatedByUser($user1->id);
+
+        $this->assertCount(6, $quotes);
+        $this->assertEquals($quote5->id, $quotes[0]->quote_id);
+        $this->assertEquals($quote8->id, $quotes[1]->quote_id);
+        $this->assertEquals($quote3->id, $quotes[2]->quote_id);
+        $this->assertEquals($quote9->id, $quotes[3]->quote_id);
+        $this->assertEquals($quote1->id, $quotes[4]->quote_id);
+        $this->assertEquals($quote7->id, $quotes[5]->quote_id);
+
+        $quotes = $this->quoteService->getQuotesRatedByUser($user2->id);
+
+        $this->assertCount(3, $quotes);
+        $this->assertEquals($quote6->id, $quotes[0]->quote_id);
+        $this->assertEquals($quote2->id, $quotes[1]->quote_id);
+        $this->assertEquals($quote4->id, $quotes[2]->quote_id);
+
+        $quotes = $this->quoteService->getQuotesRatedByUser($user3->id);
+
+        $this->assertCount(0, $quotes);
+    }
+
     private function insertQuoteAndRatings(array $userRatings): Quote
     {
         $quote = Quote::factory()->create();

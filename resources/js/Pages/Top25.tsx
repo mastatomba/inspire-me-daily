@@ -1,7 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
-export default function Dashboard({quotes} : {quotes:Array<any>}) {
+export default function Top25({quotes} : {quotes:Array<any>}) {
     var quoteNumber = 0;
 
     return (

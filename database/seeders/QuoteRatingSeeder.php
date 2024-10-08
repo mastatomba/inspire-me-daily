@@ -14,7 +14,12 @@ class QuoteRatingSeeder extends Seeder
      */
     public function run(): void
     {
-        $user_ids = User::all()->pluck('id')->toArray();
+        $user_ids = User::query()
+            ->where('email', '<>', 'mahatma@gandhi.com')
+            ->get()
+            ->pluck('id')
+            ->toArray()
+        ;
         $quote_ids = Quote::all()->pluck('id')->toArray();
 
         $data = [];

@@ -20,6 +20,8 @@ Route::get('/dashboard', [DashboardController::class, 'show'])->middleware(['aut
 
 Route::get('/top25', [QuoteController::class, 'listTop25'])->middleware(['auth', 'verified'])->name('top25');
 
+Route::get('/my_ratings', [QuoteController::class, 'listCurrentUserRatings'])->middleware(['auth', 'verified'])->name('my_ratings');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
